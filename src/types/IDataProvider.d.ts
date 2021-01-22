@@ -1,0 +1,3 @@
+interface IDataProvider {
+  getData: () => TData;
+}
