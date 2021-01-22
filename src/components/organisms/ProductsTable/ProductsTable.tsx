@@ -2,7 +2,7 @@ import React from "react";
 import { useStoreon } from "storeon/react";
 
 const ProductsTable = () => {
-  const { products, groups } = useStoreon("products", "groups");
+  const { servicesProvider } = useStoreon("servicesProvider");
 
   return <div> Products Table</div>;
 };

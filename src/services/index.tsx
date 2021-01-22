@@ -1,5 +1,3 @@
-class Services implements IDataProvider {
-  constructor();
-}
+import Remote from "./Remote";
 
-export default Services;
+export default Remote;

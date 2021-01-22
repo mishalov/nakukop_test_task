@@ -1,11 +1,12 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance, AxiosResponse } from "axios";
 import { fold } from "fp-ts/lib/Either";
 import { flow, pipe } from "fp-ts/lib/function";
 import TRemoteServiceErrorHandler from "types/TRemoteServiceErrorHandler";
-import getRequest from "./api";
-import Axios from "axios";
+import Axios, { AxiosError } from "axios";
 import TGetRequestType from "types/TGetRequestType";
 import { left, right } from "fp-ts/lib/Either";
+import IDataProvider from "types/IDataProvider";
+import TData from "types/TData";
 
 class Remote implements IDataProvider {
   api: AxiosInstance = Axios.create({
@@ -21,22 +22,25 @@ class Remote implements IDataProvider {
    * @param url Урл по которому находится джсон
    * @param config Конфиг для аксиоса если нужен будет
    */
-  private getRequest: TGetRequestType<TData> = async (url, config) => {
+  private getRequest: TGetRequestType<TData> = async (url) => {
     const { api } = this;
     try {
-      const response = await api.get(url, config);
+      const response = await api.get<any, AxiosResponse<TData>>(url);
       return right(response);
     } catch (e) {
-      return left(e);
+      return left(e as AxiosError<TData>);
     }
   };
 
-  public getData = async (errorHandler: TRemoteServiceErrorHandler<TData>) =>
-    pipe(
-      await getRequest("/data"),
+  public getData = async (errorHandler: TRemoteServiceErrorHandler<TData>) => {
+    return pipe(
+      await this.getRequest("/data"),
       fold(
         flow(errorHandler, () => null),
         (response) => response.data
       )
     );
+  };
 }
+
+export default Remote;

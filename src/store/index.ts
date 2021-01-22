@@ -2,13 +2,14 @@
  * В данном проекте стор было решено не декомпозировать, потому что данных мало - всего два типа
  */
 
-import getDataService from "services/getDataService";
+import { servicesProvider } from "services.config";
 import { createStoreon, StoreonModule } from "storeon";
-import { useStoreon } from "storeon/react"; // or storeon/preact
+import IDataProvider from "types/IDataProvider";
 import TGroup from "types/TGroup";
 import TProduct from "types/TProduct";
 
 type TState = {
+  servicesProvider: IDataProvider;
   groups: TGroup[];
   products: TProduct[];
 };
@@ -16,10 +17,13 @@ type TState = {
 type TEvents = {};
 
 const mainModule: StoreonModule<TState, TEvents> = (store) => {
-  store.on("@init", async () => {
-    console.log("инициализируюсь");
-    console.log(await getDataService(console.log));
-  });
+  /**
+   * Реализация внедрения зависимостей.
+   * Мой первый опыт работы со `storeon`, надеюсь, тут не накосячил.
+   */
+  store.on("@init", () => ({
+    servicesProvider,
+  }));
 };
 
 const store = createStoreon<TState, TEvents>([mainModule]);

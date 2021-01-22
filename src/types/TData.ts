@@ -1,3 +1,5 @@
+import TDataItem from "./TDataItem";
+
 type TData = {
   Error: string;
   Id: 0;
@@ -6,3 +8,5 @@ type TData = {
     Goods: TDataItem[];
   };
 };
+
+export default TData;
