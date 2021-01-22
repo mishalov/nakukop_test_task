@@ -26,7 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "mock": "json-server --watch ./task/data.json -p 5000"
+    "mock": "node mockServer.js"
   },
   "eslintConfig": {
     "extends": [

@@ -4,12 +4,12 @@
 
 import { servicesProvider } from "services.config";
 import { createStoreon, StoreonModule } from "storeon";
-import IDataProvider from "types/IDataProvider";
+import IServicesProvider from "types/IServicesProvider";
 import TGroup from "types/TGroup";
 import TProduct from "types/TProduct";
 
 type TState = {
-  servicesProvider: IDataProvider;
+  servicesProvider: IServicesProvider;
   groups: TGroup[];
   products: TProduct[];
 };
