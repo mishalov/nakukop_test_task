@@ -1,3 +1,3 @@
 interface IDataProvider {
-  getData: () => TData;
+  getData: () => Promise<TData>;
 }
