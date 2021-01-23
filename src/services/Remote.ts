@@ -3,17 +3,27 @@ import { fold } from "fp-ts/lib/Either";
 import { flow, pipe } from "fp-ts/lib/function";
 import TRemoteServiceErrorHandler from "types/TRemoteServiceErrorHandler";
 import Axios, { AxiosError } from "axios";
-import TGetRequestType from "types/TGetRequestType";
 import { left, right } from "fp-ts/lib/Either";
 import IServicesProvider from "types/IServicesProvider";
 import TData from "types/TData";
 import TNames from "types/TNames";
 import { remoteBaseUrl } from "services.config";
 
+/**
+ * В этом классе есть два метода.
+ * Можно генерик-параметрами сделать так, чтобы был один (url передавать параметром)
+ *
+ * Но можно и оставить, как в данной реализации и сделано. В случае, если при запросе разных данных с ремоута
+ * будет требоваться, например, разный конфиг аксиоса - такая реализация будет оправдана.
+ */
 class Remote implements IServicesProvider {
-  api: AxiosInstance = Axios.create({
-    baseURL: remoteBaseUrl,
-  });
+  api: AxiosInstance;
+
+  constructor() {
+    this.api = Axios.create({
+      baseURL: remoteBaseUrl,
+    });
+  }
 
   /**
    * Мы предполагаем что при ошибке (в ответе `Success` != true)
@@ -24,28 +34,37 @@ class Remote implements IServicesProvider {
    * @param url Урл по которому находится джсон
    * @param config Конфиг для аксиоса если нужен будет
    */
-  private getRequest: TGetRequestType<any> = async (url) => {
+  private async getRequest<RemoteDataType = any>(url: string) {
     const { api } = this;
     try {
-      const response = await api.get<any, AxiosResponse<any>>(url);
+      const response = await api.get<any, AxiosResponse<RemoteDataType>>(url);
       return right(response);
     } catch (e) {
-      return left(e as AxiosError<any>);
+      return left(e as AxiosError<RemoteDataType>);
     }
-  };
+  }
+
+  /**
+   * DRY : Читай коммент к классу
+   * @param errorHandler Обработчик ошибок при фетче Data
+   */
 
   public getData = async (errorHandler: TRemoteServiceErrorHandler<TData>) =>
     pipe(
-      await this.getRequest("/dataRoute"),
+      await this.getRequest<TData>("/dataRoute"),
       fold(
         flow(errorHandler, () => null),
         (response) => response.data
       )
     );
 
+  /**
+   * DRY : Читай коммент к классу
+   * @param errorHandler Обработчик ошибок при фетче Data
+   */
   public getNames = async (errorHandler: TRemoteServiceErrorHandler<TNames>) =>
     pipe(
-      await this.getRequest("/namesRoute"),
+      await this.getRequest<TNames>("/namesRoute"),
       fold(
         flow(errorHandler, () => null),
         (response) => response.data

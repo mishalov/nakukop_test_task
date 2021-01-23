@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.scss";
-import { StoreContext } from "storeon/react";
-import store from "store";
+import { StoreContext, useStoreon } from "storeon/react";
 import ProductsTable from "components/organisms/ProductsTable";
 
 const App = () => {
+  const { dispatch, products, groups } = useStoreon("products", "groups");
+  console.log("products, groups: ", products, groups);
+  useEffect(() => {
+    dispatch("productsGroups/load");
+  }, [dispatch]);
+
   return (
-    <StoreContext.Provider value={store}>
-      <div className="App">
-        <ProductsTable />
-      </div>
-    </StoreContext.Provider>
+    <div className="App">
+      <ProductsTable />
+    </div>
   );
 };
 
