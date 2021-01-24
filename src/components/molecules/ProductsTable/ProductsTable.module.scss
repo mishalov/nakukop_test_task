@@ -31,12 +31,18 @@
 }
 
 .price {
-  width: 50px;
+  width: 60px;
   text-align: center;
   background-color: $table-background;
+}
+
+.count {
+  width: 60px;
+  text-align: center;
 }
 
 .value {
   background-color: $table-value-background;
   padding: 10px 14px;
+  @include font-regular();
 }

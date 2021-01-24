@@ -1,0 +1,28 @@
+@import "../../../styles/colors";
+@import "../../../styles/fonts";
+@import "../../../styles/sizes";
+
+.cart {
+  width: 100%;
+}
+
+.header {
+  &_item {
+    border-bottom: 1px solid $table-border;
+    padding: 12px 0px;
+    text-align: left;
+    color: $cart-header;
+    padding: 8px;
+  }
+  &_name {
+    width: 70%;
+  }
+
+  &_count {
+    width: 10%;
+  }
+
+  &_price {
+    width: 20%;
+  }
+}

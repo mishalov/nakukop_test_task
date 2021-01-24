@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { StoreContext } from "storeon/react";
@@ -12,7 +11,7 @@ ReactDOM.render(
       <App />
     </StoreContext.Provider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById("nakukop-react-test")
 );
 
 // If you want to start measuring performance in your app, pass a function

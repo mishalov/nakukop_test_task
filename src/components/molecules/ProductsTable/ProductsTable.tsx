@@ -1,6 +1,5 @@
 import EditableText from "components/atoms/EditableText";
 import React, { useCallback } from "react";
-import { useStoreon } from "storeon/react";
 import TGroup from "types/TGroup";
 import TProduct from "types/TProduct";
 import styles from "./ProductsTable.module.scss";
@@ -17,7 +16,10 @@ export interface IProductsTableProps {
   onActivateEdit: (id: number | null) => void;
 }
 
-const label = "Для редактирования таблицы кликните на иконку в шапке таблицы";
+const LABEL_EDIT =
+  "Для редактирования таблицы кликните на иконку в шапке таблицы";
+const LABEL_TO_CART = "Кликните по товару для добавления в корзину";
+const LABEL_IN_STOCk = "Остаток на складе";
 
 const ProductsTable: React.FC<IProductsTableProps> = (props) => {
   const {
@@ -32,35 +34,70 @@ const ProductsTable: React.FC<IProductsTableProps> = (props) => {
 
   const handleActivateEdit = useCallback(() => {
     onActivateEdit(editIsActive ? null : group.id);
-  }, [group, editIsActive]);
+  }, [group, editIsActive, onActivateEdit]);
 
-  const createHandleEditProductName = (product: TProduct) => (
-    e: React.FormEvent<HTMLTextAreaElement>
-  ) => onProductChange(product, e.currentTarget.value);
+  const createHandleEditProductName = useCallback(
+    (product: TProduct) => (e: React.FormEvent<HTMLTextAreaElement>) =>
+      onProductChange(product, e.currentTarget.value),
+    [onProductChange]
+  );
 
-  const renderProduct = (product: TProduct) => (
-    <tr key={product.id}>
-      <td className={styles.row_item}>
+  const createHandleProductClick = useCallback(
+    (product: TProduct) => () => {
+      if (!editIsActive) return onProductClick(product);
+    },
+    [onProductClick, editIsActive]
+  );
+
+  const renderName = useCallback(
+    (product: TProduct) =>
+      editIsActive ? (
         <EditableText
           className={styles.value}
           readOnly={!editIsActive}
           onInput={createHandleEditProductName(product)}
-          title={label}
           rows={3}
+          value={product.name}
+        />
+      ) : (
+        <div className={styles.value}>{product.name}</div>
+      ),
+    [editIsActive, createHandleEditProductName]
+  );
+
+  const renderProduct = useCallback(
+    (product: TProduct) => (
+      <tr
+        key={product.id}
+        onClick={createHandleProductClick(product)}
+        role="button"
+        aria-label="Добавить товар в корзину"
+        title={LABEL_TO_CART}
+      >
+        <td className={styles.row_item}>{renderName(product)}</td>
+        <td
+          className={cn(styles.count, styles.row_item)}
+          title={LABEL_IN_STOCk}
         >
-          {product.name}
-        </EditableText>
-      </td>
-      <td className={cn(styles.price, styles.row_item)}>{product.price}</td>
-    </tr>
+          {product.count}
+        </td>
+        <td className={cn(styles.price, styles.row_item)}>{product.price} ₽</td>
+      </tr>
+    ),
+    [
+      createHandleProductClick,
+      createHandleEditProductName,
+      editIsActive,
+      renderName,
+    ]
   );
 
   return (
     <table className={cn(styles.table, className)}>
       <thead className={styles.header}>
         <tr>
-          <th colSpan={2}>
-            <div className={styles.title} title={label}>
+          <th colSpan={3}>
+            <div className={styles.title} title={LABEL_EDIT}>
               {group.name}
               <EditIcon
                 onClick={handleActivateEdit}

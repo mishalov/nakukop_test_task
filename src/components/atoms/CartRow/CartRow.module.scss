@@ -1,0 +1,12 @@
+@import "../../../styles/colors";
+@import "../../../styles/fonts";
+@import "../../../styles/sizes";
+
+.row {
+  border-bottom: 1px solid $table-border;
+  @include font-regular();
+
+  td {
+    padding: 8px;
+  }
+}

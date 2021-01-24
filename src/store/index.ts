@@ -2,15 +2,23 @@
  * В данном проекте стор было решено не декомпозировать, потому что данных мало - всего два типа
  */
 
-import { filter, findFirst, findIndex, updateAt } from "fp-ts/lib/Array";
-import { constNull, constUndefined, pipe } from "fp-ts/lib/function";
+import {
+  filter,
+  findFirst,
+  findIndex,
+  getMonoid,
+  updateAt,
+} from "fp-ts/lib/Array";
+import { constNull, pipe } from "fp-ts/lib/function";
 import { fold } from "fp-ts/lib/Option";
 import { servicesProvider } from "services.config";
 import { createStoreon, StoreonModule } from "storeon";
 import IServicesProvider from "types/IServicesProvider";
+import TCartEntry from "types/TCartEntry";
 import TGroup from "types/TGroup";
 import TProduct from "types/TProduct";
 import mergeDataAndNames from "utils/mergeDataAndNames";
+import updateCartItemCount from "utils/updateCartItemCount";
 
 type TState = {
   servicesProvider: IServicesProvider;
@@ -18,6 +26,7 @@ type TState = {
   error: string;
   groups: TGroup[];
   products: TProduct[];
+  cart: TCartEntry[];
 };
 
 type TEvents = {
@@ -26,6 +35,9 @@ type TEvents = {
   "productsGroups/load": never;
   "productsGroups/save": { products: TProduct[]; groups: TGroup[] };
   "productsGroups/updateProductName": { product: TProduct; newName: string };
+  "cart/add": { product: TProduct };
+  "cart/updateCount": { item: TCartEntry; count: number };
+  "cart/remove": { item: TCartEntry };
 };
 
 const mainModule: StoreonModule<TState, TEvents> = (store) => {
@@ -36,6 +48,7 @@ const mainModule: StoreonModule<TState, TEvents> = (store) => {
   store.on("@init", () => ({
     servicesProvider,
     loading: true,
+    cart: [],
   }));
 
   /**
@@ -95,6 +108,48 @@ const mainModule: StoreonModule<TState, TEvents> = (store) => {
       fold(constNull, (newProducts) => ({ products: newProducts }))
     )
   );
+
+  /**
+   * Если продукт добавляемый в корзину уже там лежит - увеличиваем количество по этой позиции
+   * на единицу, иначе просто добавляем
+   */
+  store.on("cart/add", ({ cart, products }, { product }) => ({
+    cart: pipe(
+      cart,
+      findFirst((cart) => cart.productId === product.id),
+      fold(
+        () => {
+          const monoid = getMonoid<TCartEntry>();
+          return monoid.concat(cart, [{ productId: product.id, count: 1 }]);
+        },
+        (el) => updateCartItemCount(cart, el, el.count + 1)
+      )
+    ),
+  }));
+
+  /**
+   * Изменить количество товара в корзине
+   */
+  store.on("cart/updateCount", ({ cart }, { item, count }) => ({
+    cart: pipe(
+      cart,
+      findFirst((cart) => cart.productId === item.productId),
+      fold(
+        () => cart,
+        (el) => updateCartItemCount(cart, el, count)
+      )
+    ),
+  }));
+
+  /**
+   * Просто удаление из корзины
+   */
+  store.on("cart/remove", ({ cart }, { item }) => ({
+    cart: pipe(
+      cart,
+      filter((inCartItem) => inCartItem.productId !== item.productId)
+    ),
+  }));
 
   store.on("error", (_, errorMessage: string) => ({
     error: errorMessage,

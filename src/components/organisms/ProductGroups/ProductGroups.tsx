@@ -12,14 +12,17 @@ const ProductGroups = () => {
   const handleOnProductChange = (product: TProduct, newName: string) =>
     dispatch("productsGroups/updateProductName", { product, newName });
 
+  const handleOnProductClick = (product: TProduct) =>
+    dispatch("cart/add", { product });
+
   const renderGroupTable = (group: TGroup) => (
-    <div className={styles.group_wrapper}>
+    <div className={styles.group_wrapper} key={group.id}>
       <ProductsTable
         className={styles.group}
         key={group.id}
         group={group}
         products={products}
-        onProductClick={() => {}}
+        onProductClick={handleOnProductClick}
         onProductChange={handleOnProductChange}
         onActivateEdit={setActiveTable}
         editIsActive={activeTalbe === group.id}

@@ -5,6 +5,7 @@ import "reset-css";
 import Container from "components/atoms/Container";
 import styles from "./App.module.scss";
 import "./styles/_global.scss";
+import CartContainer from "components/organisms/CartContainer";
 
 const App = () => {
   const { dispatch, products, groups } = useStoreon("products", "groups");
@@ -18,6 +19,7 @@ const App = () => {
   return (
     <Container className={styles.application}>
       <ProductGroups />
+      <CartContainer className={styles.cart} />
     </Container>
   );
 };

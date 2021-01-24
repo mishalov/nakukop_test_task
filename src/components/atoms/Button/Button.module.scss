@@ -1,0 +1,15 @@
+@import "../../../styles/colors";
+@import "../../../styles/fonts";
+@import "../../../styles/sizes";
+
+.button {
+  background-color: transparent;
+  cursor: pointer;
+  border-style: none;
+  text-decoration: dashed;
+  width: 100%;
+
+  &:hover {
+    color: $button-hover-blue;
+  }
+}
