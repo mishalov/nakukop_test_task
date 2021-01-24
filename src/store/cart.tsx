@@ -4,6 +4,7 @@ import { fold } from "fp-ts/lib/Option";
 import { TEvents, TState } from "store";
 import { StoreonModule } from "storeon";
 import TCartEntry from "types/TCartEntry";
+import sanitizeProductCount from "utils/sanitizeProductCount";
 import updateCartItemCount from "utils/updateCartItemCount";
 
 const cartModule: StoreonModule<TState, TEvents> = (store) => {
@@ -49,11 +50,7 @@ const cartModule: StoreonModule<TState, TEvents> = (store) => {
                 updateCartItemCount(
                   cart,
                   el,
-                  count > 0
-                    ? count < product.count
-                      ? count
-                      : product.count
-                    : 0
+                  sanitizeProductCount(product, count)
                 )
             )
           )
