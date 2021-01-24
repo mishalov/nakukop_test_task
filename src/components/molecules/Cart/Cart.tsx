@@ -23,11 +23,7 @@ const Cart: React.FC<ICartProps> = (props) => {
   const createHandleChangeCount = useCallback(
     (item: TCartEntry) => (e: React.FormEvent<HTMLInputElement>) => {
       const value = Number(e.currentTarget.value);
-      const min = Number(e.currentTarget.min);
-      const max = Number(e.currentTarget.max);
-
-      const trueValue = value > max ? max : value < min ? min : value;
-      return onChangeCount(item, trueValue);
+      return onChangeCount(item, value);
     },
     [onChangeCount]
   );
