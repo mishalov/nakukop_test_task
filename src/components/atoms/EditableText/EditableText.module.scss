@@ -1,0 +1,11 @@
+.input {
+  resize: none;
+  border-style: none;
+  display: block;
+  background-color: transparent;
+  width: 100%;
+
+  &:read-only {
+    outline-style: none;
+  }
+}

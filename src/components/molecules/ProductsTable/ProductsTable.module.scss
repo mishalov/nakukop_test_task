@@ -1,0 +1,42 @@
+@import "../../../styles/colors";
+@import "../../../styles/fonts";
+@import "../../../styles/sizes";
+
+.table {
+  border: 1px solid $table-border;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  width: 100%;
+}
+
+.title {
+  padding: 8px 16px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include font-header();
+}
+
+.edit {
+  cursor: pointer;
+}
+
+.header {
+  background-color: $table-background;
+}
+
+.row_item {
+  border-top: 1px solid $table-border;
+}
+
+.price {
+  width: 50px;
+  text-align: center;
+  background-color: $table-background;
+}
+
+.value {
+  background-color: $table-value-background;
+  padding: 10px 14px;
+}

@@ -1,19 +1,24 @@
 import React, { useEffect } from "react";
-import "./App.scss";
-import { StoreContext, useStoreon } from "storeon/react";
-import ProductsTable from "components/organisms/ProductsTable";
+import { useStoreon } from "storeon/react";
+import ProductGroups from "components/organisms/ProductGroups";
+import "reset-css";
+import Container from "components/atoms/Container";
+import styles from "./App.module.scss";
+import "./styles/_global.scss";
 
 const App = () => {
   const { dispatch, products, groups } = useStoreon("products", "groups");
-  console.log("products, groups: ", products, groups);
+
   useEffect(() => {
     dispatch("productsGroups/load");
   }, [dispatch]);
 
+  if (!products || !groups) return <div>Загрузка...</div>;
+
   return (
-    <div className="App">
-      <ProductsTable />
-    </div>
+    <Container className={styles.application}>
+      <ProductGroups />
+    </Container>
   );
 };
 
