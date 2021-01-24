@@ -1,0 +1,17 @@
+@import "../../../styles/colors";
+@import "../../../styles/fonts";
+@import "../../../styles/sizes";
+
+.currency {
+  padding: 16px;
+  @include font-header();
+}
+.isRising {
+  color: #fff;
+  background-color: $currency-rising;
+}
+
+.isFalling {
+  color: #fff;
+  background-color: $currency-falling;
+}

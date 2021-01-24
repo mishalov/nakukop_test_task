@@ -3,6 +3,7 @@ import TCartEntry from "types/TCartEntry";
 import TProduct from "types/TProduct";
 import Button from "../Button";
 import InputNumber from "../InputNumber";
+import WithConversion from "../WithConversion";
 import styles from "./CartRow.module.scss";
 
 interface ICartRowProps {
@@ -33,7 +34,9 @@ const CartRow: React.FC<ICartRowProps> = ({
           onChange={createHandleChangeCount(item)}
         />
       </td>
-      <td>{price}</td>
+      <td>
+        <WithConversion>{price}</WithConversion>
+      </td>
       <td>
         <Button onClick={createHandleRemoveItem(item)}>удалить</Button>
       </td>

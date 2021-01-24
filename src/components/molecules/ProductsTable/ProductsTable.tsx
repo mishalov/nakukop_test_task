@@ -5,6 +5,7 @@ import TProduct from "types/TProduct";
 import styles from "./ProductsTable.module.scss";
 import cn from "classnames";
 import EditIcon from "components/atoms/Icons/EditIcon";
+import WithConversion from "components/atoms/WithConversion";
 
 export interface IProductsTableProps {
   className?: string;
@@ -81,15 +82,12 @@ const ProductsTable: React.FC<IProductsTableProps> = (props) => {
         >
           {product.count}
         </td>
-        <td className={cn(styles.price, styles.row_item)}>{product.price} ₽</td>
+        <td className={cn(styles.price, styles.row_item)}>
+          <WithConversion>{product.price}</WithConversion>
+        </td>
       </tr>
     ),
-    [
-      createHandleProductClick,
-      createHandleEditProductName,
-      editIsActive,
-      renderName,
-    ]
+    [createHandleProductClick, renderName]
   );
 
   return (

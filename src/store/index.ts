@@ -11,33 +11,42 @@ import {
 } from "fp-ts/lib/Array";
 import { constNull, pipe } from "fp-ts/lib/function";
 import { fold } from "fp-ts/lib/Option";
-import { servicesProvider } from "services.config";
+import { currenciesRefetchTime, servicesProvider } from "services.config";
 import { createStoreon, StoreonModule } from "storeon";
 import IServicesProvider from "types/IServicesProvider";
 import TCartEntry from "types/TCartEntry";
+import TCurrencyAlias from "types/TCurrencyAlias";
+import TCurrencyItem from "types/TCurrencyItem";
 import TGroup from "types/TGroup";
 import TProduct from "types/TProduct";
 import mergeDataAndNames from "utils/mergeDataAndNames";
 import updateCartItemCount from "utils/updateCartItemCount";
 
-type TState = {
+export type TState = {
   servicesProvider: IServicesProvider;
   loading: boolean;
   error: string;
   groups: TGroup[];
   products: TProduct[];
   cart: TCartEntry[];
+  currencies: TCurrencyItem[];
+  previousCurrencies: TCurrencyItem[];
+  currentCurrency: TCurrencyAlias;
+  currenciesTimer: NodeJS.Timeout;
 };
 
-type TEvents = {
+export type TEvents = {
   error: string;
   loading: boolean;
+  exit: undefined;
   "productsGroups/load": never;
   "productsGroups/save": { products: TProduct[]; groups: TGroup[] };
   "productsGroups/updateProductName": { product: TProduct; newName: string };
   "cart/add": { product: TProduct };
   "cart/updateCount": { item: TCartEntry; count: number };
   "cart/remove": { item: TCartEntry };
+  "currencies/fetch": undefined;
+  "currencies/set": TCurrencyItem[];
 };
 
 const mainModule: StoreonModule<TState, TEvents> = (store) => {
@@ -49,7 +58,16 @@ const mainModule: StoreonModule<TState, TEvents> = (store) => {
     servicesProvider,
     loading: true,
     cart: [],
+    currentCurrency: "rub",
+    currenciesTimer: setInterval(
+      () => store.dispatch("currencies/fetch"),
+      currenciesRefetchTime
+    ),
   }));
+
+  store.on("exit", (state) => {
+    clearInterval(state.currenciesTimer);
+  });
 
   /**
    * Получить Группы и Продукты в удобоваримом виде
@@ -79,6 +97,7 @@ const mainModule: StoreonModule<TState, TEvents> = (store) => {
       return;
     }
 
+    store.dispatch("currencies/fetch");
     store.dispatch("productsGroups/save", mergeDataAndNames(data, names));
   });
 
@@ -149,6 +168,31 @@ const mainModule: StoreonModule<TState, TEvents> = (store) => {
       cart,
       filter((inCartItem) => inCartItem.productId !== item.productId)
     ),
+  }));
+
+  /**
+   * Запрос списка валют
+   */
+
+  store.on("currencies/fetch", async (state) => {
+    const currencies = await state.servicesProvider.getCurrencies(
+      console.error
+    );
+
+    if (!currencies) {
+      store.dispatch("error", "Не удалось получить валюты!");
+      return;
+    }
+
+    store.dispatch("currencies/set", currencies);
+  });
+
+  /**
+   * сохранение валют в стор
+   */
+  store.on("currencies/set", (state, currencies: TCurrencyItem[]) => ({
+    currencies,
+    previousCurrencies: state.currencies || currencies,
   }));
 
   store.on("error", (_, errorMessage: string) => ({

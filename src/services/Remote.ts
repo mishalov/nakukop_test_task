@@ -8,14 +8,8 @@ import IServicesProvider from "types/IServicesProvider";
 import TData from "types/TData";
 import TNames from "types/TNames";
 import { remoteBaseUrl } from "services.config";
+import TCurrencyItem from "types/TCurrencyItem";
 
-/**
- * В этом классе есть два метода.
- * Можно генерик-параметрами сделать так, чтобы был один (url передавать параметром)
- *
- * Но можно и оставить, как в данной реализации и сделано. В случае, если при запросе разных данных с ремоута
- * будет требоваться, например, разный конфиг аксиоса - такая реализация будет оправдана.
- */
 class Remote implements IServicesProvider {
   api: AxiosInstance;
 
@@ -44,32 +38,22 @@ class Remote implements IServicesProvider {
     }
   }
 
-  /**
-   * DRY : Читай коммент к классу
-   * @param errorHandler Обработчик ошибок при фетче Data
-   */
+  private createFetchFromRemote<PredictedType = any>(url: string) {
+    return async (errorHandler: TRemoteServiceErrorHandler<PredictedType>) =>
+      pipe(
+        await this.getRequest<PredictedType>(url),
+        fold(
+          flow(errorHandler, () => null),
+          (response) => response.data
+        )
+      );
+  }
 
-  public getData = async (errorHandler: TRemoteServiceErrorHandler<TData>) =>
-    pipe(
-      await this.getRequest<TData>("/dataRoute"),
-      fold(
-        flow(errorHandler, () => null),
-        (response) => response.data
-      )
-    );
-
-  /**
-   * DRY : Читай коммент к классу
-   * @param errorHandler Обработчик ошибок при фетче Data
-   */
-  public getNames = async (errorHandler: TRemoteServiceErrorHandler<TNames>) =>
-    pipe(
-      await this.getRequest<TNames>("/namesRoute"),
-      fold(
-        flow(errorHandler, () => null),
-        (response) => response.data
-      )
-    );
+  public getData = this.createFetchFromRemote<TData>("/dataRoute");
+  public getNames = this.createFetchFromRemote<TNames>("/namesRoute");
+  public getCurrencies = this.createFetchFromRemote<TCurrencyItem[]>(
+    "/currenciesRoute"
+  );
 }
 
 export default Remote;

@@ -7,6 +7,8 @@ import { constNull, pipe } from "fp-ts/lib/function";
 import { findFirst } from "fp-ts/lib/Array";
 import { fold } from "fp-ts/lib/Option";
 import CartRow from "components/atoms/CartRow";
+import getSummForCart from "utils/getSummForCart";
+import WithConversion from "components/atoms/WithConversion";
 
 export interface ICartProps {
   items: TCartEntry[];
@@ -47,6 +49,7 @@ const Cart: React.FC<ICartProps> = (props) => {
 
       return (
         <CartRow
+          key={item.productId}
           product={product}
           item={item}
           createHandleRemoveItem={createHandleRemoveItem}
@@ -56,6 +59,8 @@ const Cart: React.FC<ICartProps> = (props) => {
     },
     [createHandleChangeCount, createHandleRemoveItem, products]
   );
+
+  const summ = getSummForCart(products, items);
 
   return (
     <table className={cn(styles.cart, className)}>
@@ -77,7 +82,15 @@ const Cart: React.FC<ICartProps> = (props) => {
           </th>
         </tr>
       </thead>
-      <tbody className={styles.body}>{items.map(renderItemRow)}</tbody>
+      <tbody className={styles.body}>
+        {items.map(renderItemRow)}
+        <tr>
+          <td colSpan={3} className={styles.summ}>
+            Итого:
+            <WithConversion>{summ}</WithConversion>
+          </td>
+        </tr>
+      </tbody>
     </table>
   );
 };
