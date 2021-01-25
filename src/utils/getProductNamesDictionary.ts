@@ -3,6 +3,10 @@ import { pipe } from "fp-ts/lib/function";
 import { map as mapRecord, collect } from "fp-ts/lib/Record";
 import TNames from "types/TNames";
 
+/**
+ * Получение словаря {id, name} для товаровж
+ * @param names
+ */
 const getProductNamesDictionary = (names: TNames) =>
   pipe(
     names,

@@ -4,6 +4,11 @@ import { fold } from "fp-ts/lib/Option";
 import TCurrencyAlias from "types/TCurrencyAlias";
 import TCurrencyItem from "types/TCurrencyItem";
 
+/**
+ * Получение объекта валюты из списка валют по алиасу
+ * @param currencies
+ * @param currentCurrency
+ */
 const getCurrentCurrencyObject = (
   currencies: TCurrencyItem[],
   currentCurrency: TCurrencyAlias

@@ -3,6 +3,12 @@ import { pipe } from "fp-ts/lib/function";
 import { fold } from "fp-ts/lib/Option";
 import TCartEntry from "types/TCartEntry";
 
+/**
+ * Получает текущую корзину, товар который нужно обновить и новое количество. Возвращает корзину с обновленным товаром
+ * @param cart
+ * @param item
+ * @param count
+ */
 const updateCartItemCount = (
   cart: TCartEntry[],
   item: TCartEntry,
