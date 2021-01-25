@@ -15,10 +15,10 @@ const getCurrentCurrencyObject = (
 ) =>
   pipe(
     currencies,
-    findFirst((el) => el.alias === currentCurrency),
+    findFirst((currencyItem) => currencyItem.alias === currentCurrency),
     fold(
       () => null,
-      (el) => el
+      (currencyItem) => currencyItem
     )
   );
 

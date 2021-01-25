@@ -19,7 +19,7 @@ const updateCartItemCount = (
     updateAt(
       pipe(
         cart,
-        findIndex((el) => el.productId === item.productId),
+        findIndex((cartElement) => cartElement.productId === item.productId),
         fold(
           () => -1,
           (index) => index

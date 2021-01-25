@@ -21,11 +21,13 @@ const cartModule: StoreonModule<TState, TEvents> = (store) => {
           const monoid = getMonoid<TCartEntry>();
           return monoid.concat(cart, [{ productId: product.id, count: 1 }]);
         },
-        (el) =>
+        (cartElement) =>
           updateCartItemCount(
             cart,
-            el,
-            el.count < product.count ? el.count + 1 : el.count
+            cartElement,
+            cartElement.count < product.count
+              ? cartElement.count + 1
+              : cartElement.count
           )
       )
     ),
@@ -40,16 +42,16 @@ const cartModule: StoreonModule<TState, TEvents> = (store) => {
       findFirst((cart) => cart.productId === item.productId),
       fold(
         () => cart,
-        (el) =>
+        (cartElement) =>
           pipe(
             products,
-            findFirst((product) => product.id === el.productId),
+            findFirst((product) => product.id === cartElement.productId),
             fold(
               () => cart,
               (product) =>
                 updateCartItemCount(
                   cart,
-                  el,
+                  cartElement,
                   sanitizeProductCount(product, count)
                 )
             )

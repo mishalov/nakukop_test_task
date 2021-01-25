@@ -16,7 +16,7 @@ const getSummForCart = (products: TProduct[], cartItems: TCartEntry[]) => {
       findFirst((product) => product.id === cartItem.productId),
       fold(
         () => 0,
-        (el) => el.price * cartItem.count
+        (product) => product.price * cartItem.count
       )
     );
 
