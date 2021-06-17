@@ -1,5 +1,5 @@
 /**
- * Это может быть перечислением названий валют если валют будет больше чем доллар и рубль
+ * Currencies aliases go here
  */
 type TCurrencyAlias = "rub";
 

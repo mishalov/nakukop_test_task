@@ -13,7 +13,7 @@ const currenciesModule: StoreonModule<TState, TEvents> = (store) => {
     );
 
     if (!currencies) {
-      store.dispatch("error", "Не удалось получить валюты!");
+      store.dispatch("error", "Cant fetch currencies!");
       return;
     }
 
@@ -21,7 +21,7 @@ const currenciesModule: StoreonModule<TState, TEvents> = (store) => {
   });
 
   /**
-   * сохранение валют в стор
+   * Save currencies into Store
    */
   store.on("currencies/set", (state, currencies: TCurrencyItem[]) => ({
     currencies,

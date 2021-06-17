@@ -19,7 +19,7 @@ type TMergeDataAndNamesResult = {
 };
 
 /**
- * Создание объектов групп из Data.json
+ * Create groups from raw data from Data.json
  * @param data
  * @param names
  */

@@ -3,7 +3,7 @@ import TCurrencyAlias from "./TCurrencyAlias";
 type TCurrencyItem = {
   alias: TCurrencyAlias;
   /**
-   * Число, на которое умножается ДОЛЛАР для получения акутальной цены в данной валюте
+   * Dollar will by multiplied by this to get price in chosen currency
    */
   multiplier: number;
   sign: string;

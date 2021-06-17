@@ -1,12 +1,8 @@
 type TSingleNameItem = {
   /**
-   * Название продукта
+   * Name of the product
    */
   N: string;
-
-  /**
-   * Назначение свойства непонятно
-   */
   T: string;
 };
 

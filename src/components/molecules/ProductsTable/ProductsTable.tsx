@@ -17,10 +17,9 @@ export interface IProductsTableProps {
   onActivateEdit: (id: number | null) => void;
 }
 
-const LABEL_EDIT =
-  "Для редактирования таблицы кликните на иконку в шапке таблицы";
-const LABEL_TO_CART = "Кликните по товару для добавления в корзину";
-const LABEL_IN_STOCk = "Остаток на складе";
+const LABEL_EDIT = "To edit the table please click icon in the header of table";
+const LABEL_TO_CART = "Click product to add it into cart";
+const LABEL_IN_STOCk = "Amount in stock";
 
 const ProductsTable: React.FC<IProductsTableProps> = (props) => {
   const {
@@ -72,7 +71,7 @@ const ProductsTable: React.FC<IProductsTableProps> = (props) => {
         key={product.id}
         onClick={createHandleProductClick(product)}
         role="button"
-        aria-label="Добавить товар в корзину"
+        aria-label="Add into cart"
         title={LABEL_TO_CART}
       >
         <td className={styles.row_item}>{renderName(product)}</td>

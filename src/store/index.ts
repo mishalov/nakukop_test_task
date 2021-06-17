@@ -38,10 +38,6 @@ export type TEvents = {
 };
 
 const mainModule: StoreonModule<TState, TEvents> = (store) => {
-  /**
-   * Реализация внедрения зависимостей.
-   * Мой первый опыт работы со `storeon`, надеюсь, тут не накосячил.
-   */
   store.on("@init", () => ({
     cart: [],
     currentCurrency: "rub",

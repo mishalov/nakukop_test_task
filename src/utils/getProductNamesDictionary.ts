@@ -4,7 +4,7 @@ import { map as mapRecord, collect } from "fp-ts/lib/Record";
 import TNames from "types/TNames";
 
 /**
- * Получение словаря {id, name} для товаровж
+ * Get dictionary {id, name} for products
  * @param names
  */
 const getProductNamesDictionary = (names: TNames) =>

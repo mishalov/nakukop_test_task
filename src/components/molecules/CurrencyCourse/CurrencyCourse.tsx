@@ -38,8 +38,8 @@ const CurrencyCourse = () => {
         [styles.isRising]: isRising,
       })}
     >
-      Текущий курс валюты ({currentCurrency}) : {current.multiplier}
-      {current.sign} за $1 ({differenseSign}
+      Currency course is ({currentCurrency}) : {current.multiplier}
+      {current.sign} for $1 ({differenseSign}
       {difference})
     </div>
   );

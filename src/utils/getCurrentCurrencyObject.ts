@@ -5,7 +5,7 @@ import TCurrencyAlias from "types/TCurrencyAlias";
 import TCurrencyItem from "types/TCurrencyItem";
 
 /**
- * Получение объекта валюты из списка валют по алиасу
+ * Get currencu from the list by alias
  * @param currencies
  * @param currentCurrency
  */

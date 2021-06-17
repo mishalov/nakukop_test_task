@@ -20,13 +20,12 @@ class Remote implements IServicesProvider {
   }
 
   /**
-   * Мы предполагаем что при ошибке (в ответе `Success` != true)
-   * бэк еще и статус ставит согласно ошибке. Тогда при коде != 200
-   * флоу уходит в левую часть принимающего фолда и там обрабатывается
-   * прокинутым пользователем обработчиком
+   * We suppose that in case of error (`success` != true in the answer)
+   * back-end part apply right error code. + we dont have redirects (300). So in case of code != 200
+   * flow goes to the left side of fold.
    *
-   * @param url Урл по которому находится джсон
-   * @param config Конфиг для аксиоса если нужен будет
+   * @param url Url of JSON
+   * @param config AXIOS Config if needed
    */
   private async getRequest<RemoteDataType = any>(url: string) {
     const { api } = this;
@@ -51,9 +50,8 @@ class Remote implements IServicesProvider {
 
   public getData = this.createFetchFromRemote<TData>("/dataRoute");
   public getNames = this.createFetchFromRemote<TNames>("/namesRoute");
-  public getCurrencies = this.createFetchFromRemote<TCurrencyItem[]>(
-    "/currenciesRoute"
-  );
+  public getCurrencies =
+    this.createFetchFromRemote<TCurrencyItem[]>("/currenciesRoute");
 }
 
 export default Remote;
