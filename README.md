@@ -3,11 +3,11 @@
 
 ### `yarn start`
 
-Запустить приложение на 3000 порту
+run application on port `3000`
 
 ### `yarn mock`
 
-На 5000 порту запускается Мок-сервер который сервит исходные JSON файлы. 
+Run mock-server that serve mocks on `5000` port 
 
 чтобы протестировать задание с валютами, пожалуйста поменяйте в рантайме файл `./task/currencies.json`
 
@@ -15,8 +15,8 @@
 
 При разработе использовались :
 
-`storeon` - Store manager. Разделен на модули;
+`storeon` - Store manager. Divided into modules;
 
-`fp-ts` - библиотека для функционального программирования. Пользовался этой библиотекой впервые, скорее всего мои конструкции можно и подсократить. До этого использовал `Ramda`. 
+`fp-ts` -functional programming library. First time in use by me, i have feeling like some functions could be short. 
 
 `react`, `sass`
