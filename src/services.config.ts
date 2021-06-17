@@ -7,6 +7,5 @@ export const servicesProvider: IServicesProvider = new Remote();
 
 export const currenciesRefetchTime = 15000;
 /**
- * можно вынести и в `.env`, но раз уж использую TSовский файл для конфига провайдера сервисов
- * то буду использовать и для определения раздичных констант
+ * This may be moved to `.env`, if refetch delay will be changed between environments
  */

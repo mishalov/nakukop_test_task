@@ -8,16 +8,16 @@ import mergeDataAndNames from "utils/mergeDataAndNames";
 
 const productsGroupsModule: StoreonModule<TState, TEvents> = (store) => {
   /**
-   * Получить Группы и Продукты в удобоваримом виде
+   * Get Groups and Products normalized
    */
   store.on("productsGroups/load", async () => {
     store.dispatch("loading", true);
     const dataErrorHandler = () => {
-      store.dispatch("error", "Не могу получить Data.json");
+      store.dispatch("error", "Cant get Data.json");
     };
 
     const namesErrorHandler = () => {
-      store.dispatch("error", "Не могу получить Names.json");
+      store.dispatch("error", "Cant get Names.json");
     };
 
     const [data, names] = await Promise.all([
@@ -40,8 +40,8 @@ const productsGroupsModule: StoreonModule<TState, TEvents> = (store) => {
   });
 
   /**
-   * Как я понял, асинхронный action не может возвращать значения, поэтому
-   * я сделал action который вызывается при успешном получении продуктов и групп
+   * Async action cant return anything, soooooo
+   * o created action that will be called after success fetch of products and groups
    */
   store.on("productsGroups/save", (_, payload) => ({
     ...payload,

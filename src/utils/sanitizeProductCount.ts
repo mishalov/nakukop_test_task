@@ -1,7 +1,7 @@
 import TProduct from "types/TProduct";
 
 /**
- * Минимум продукта в корзине - 1. Максимум - кол-во на складе
+ * Min products in cart is 1, max - Amount in stock
  * @param product
  * @param count
  */

@@ -38,7 +38,7 @@ const CartRow: React.FC<ICartRowProps> = ({
         <WithConversion>{price}</WithConversion>
       </td>
       <td>
-        <Button onClick={createHandleRemoveItem(item)}>удалить</Button>
+        <Button onClick={createHandleRemoveItem(item)}>Remove</Button>
       </td>
     </tr>
   );

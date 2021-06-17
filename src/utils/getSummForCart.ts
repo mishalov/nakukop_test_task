@@ -5,7 +5,7 @@ import TCartEntry from "types/TCartEntry";
 import TProduct from "types/TProduct";
 
 /**
- * ПОлучение суммы по товарам в корзине
+ * Get summary for products in cart
  * @param products
  * @param cartItems
  */

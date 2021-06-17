@@ -9,8 +9,7 @@ import updateCartItemCount from "utils/updateCartItemCount";
 
 const cartModule: StoreonModule<TState, TEvents> = (store) => {
   /**
-   * Если продукт добавляемый в корзину уже там лежит - увеличиваем количество по этой позиции
-   * на единицу, иначе просто добавляем
+   * If product that was added to cart is already there - just increment amount of it. Otherwise - add it
    */
   store.on("cart/add", ({ cart }, { product }) => ({
     cart: pipe(
@@ -34,34 +33,34 @@ const cartModule: StoreonModule<TState, TEvents> = (store) => {
   }));
 
   /**
-   * Изменить количество товара в корзине
+   * Change count of product in cart
    */
-  store.on("cart/updateCount", ({ cart, products }, { item, count }) => ({
-    cart: pipe(
-      cart,
-      findFirst((cart) => cart.productId === item.productId),
-      fold(
-        () => cart,
-        (cartElement) =>
+  store.on("cart/updateCount", ({ cart, products }, { item, count }) => {
+    const defaultBehaviour = () => cart;
+
+    return {
+      cart: pipe(
+        cart,
+        findFirst((cart) => cart.productId === item.productId),
+        fold(defaultBehaviour, (cartElement) =>
           pipe(
             products,
             findFirst((product) => product.id === cartElement.productId),
-            fold(
-              () => cart,
-              (product) =>
-                updateCartItemCount(
-                  cart,
-                  cartElement,
-                  sanitizeProductCount(product, count)
-                )
+            fold(defaultBehaviour, (product) =>
+              updateCartItemCount(
+                cart,
+                cartElement,
+                sanitizeProductCount(product, count)
+              )
             )
           )
-      )
-    ),
-  }));
+        )
+      ),
+    };
+  });
 
   /**
-   * Просто удаление из корзины
+   * Remove from the cart
    */
   store.on("cart/remove", ({ cart }, { item }) => ({
     cart: pipe(

@@ -63,18 +63,18 @@ const Cart: React.FC<ICartProps> = (props) => {
       <thead className={styles.header}>
         <tr>
           <th className={cn(styles.header_item, styles.header_name)}>
-            Наименование товара
+            Name of product
           </th>
 
           <th className={cn(styles.header_item, styles.header_count)}>
-            Количество
+            Amount
           </th>
 
           <th
             className={cn(styles.header_item, styles.header_price)}
             colSpan={2}
           >
-            Цена
+            Price
           </th>
         </tr>
       </thead>
@@ -82,7 +82,7 @@ const Cart: React.FC<ICartProps> = (props) => {
         {items.map(renderItemRow)}
         <tr>
           <td colSpan={3} className={styles.summ}>
-            Итого:
+            Summary:
             <WithConversion>{summ}</WithConversion>
           </td>
         </tr>

@@ -4,7 +4,7 @@ import { fold } from "fp-ts/lib/Option";
 import TCartEntry from "types/TCartEntry";
 
 /**
- * Получает текущую корзину, товар который нужно обновить и новое количество. Возвращает корзину с обновленным товаром
+ * Get current cart, product that should be updated and new amount. Returns cart with updated product
  * @param cart
  * @param item
  * @param count
